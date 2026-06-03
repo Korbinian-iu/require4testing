@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Anforderungen</title></head>
+<body>
+<h1>Anforderungen</h1>
+
+<form th:action="@{/requirements}" th:object="${requirement}" method="post">
+    <input th:field="*{title}" placeholder="Titel" required/>
+    <input th:field="*{description}" placeholder="Beschreibung"/>
+    <button type="submit">Speichern</button>
+</form>
+
+<table border="1">
+    <tr><th>ID</th><th>Titel</th><th>Beschreibung</th></tr>
+    <tr th:each="r : ${requirements}">
+        <td th:text="${r.id}"></td>
+        <td th:text="${r.title}"></td>
+        <td th:text="${r.description}"></td>
+    </tr>
+</table>
+</body>
+</html>

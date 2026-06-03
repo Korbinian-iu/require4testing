@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Testdurchführungen</title></head>
+<body>
+<h1>Testdurchführungen</h1>
+
+<form th:action="@{/executions}" th:object="${execution}" method="post">
+    <select name="testRunId">
+        <option value="">-- Testlauf wählen --</option>
+        <option th:each="r : ${testruns}" th:value="${r.id}" th:text="${r.name}"></option>
+    </select>
+    <select name="testCaseId">
+        <option value="">-- Testfall wählen --</option>
+        <option th:each="t : ${testcases}" th:value="${t.id}" th:text="${t.title}"></option>
+    </select>
+    <input th:field="*{tester}" placeholder="Tester Name" required/>
+    <button type="submit">Zuordnen</button>
+</form>
+
+<table border="1">
+    <tr><th>ID</th><th>Testlauf</th><th>Testfall</th><th>Tester</th><th>Ergebnis</th><th>Aktion</th></tr>
+    <tr th:each="e : ${executions}">
+        <td th:text="${e.id}"></td>
+        <td th:text="${e.testRun.name}"></td>
+        <td th:text="${e.testCase.title}"></td>
+        <td th:text="${e.tester}"></td>
+        <td th:text="${e.result}"></td>
+        <td>
+            <form th:action="@{/executions/{id}/result(id=${e.id})}" method="post">
+                <select name="result">
+                    <option th:each="r : ${results}" th:value="${r}" th:text="${r}"></option>
+                </select>
+                <button type="submit">Setzen</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
