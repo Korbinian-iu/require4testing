@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Start')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('home')}"></nav>
+
+<main class="container">
+    <h1>Require4Testing</h1>
+    <p class="subtitle">Web-App zur Organisation manueller Anwendertests – Sprint 1 (US1–US5).</p>
+
+    <div class="grid">
+        <a class="tile" th:href="@{/requirements}">
+            <span class="us">US1</span>
+            <h3>Anforderungen</h3>
+            <p>Zu testende Anforderungen erstellen und verwalten.</p>
+        </a>
+        <a class="tile" th:href="@{/testruns}">
+            <span class="us">US2</span>
+            <h3>Testläufe</h3>
+            <p>Testläufe für einen Testzyklus anlegen.</p>
+        </a>
+        <a class="tile" th:href="@{/testcases}">
+            <span class="us">US3</span>
+            <h3>Testfälle</h3>
+            <p>Testfälle zu einer Anforderung erfassen.</p>
+        </a>
+        <a class="tile" th:href="@{/executions}">
+            <span class="us">US4 · US5</span>
+            <h3>Testdurchführungen</h3>
+            <p>Testfälle + Tester:in einem Testlauf zuordnen und Ergebnisse erfassen.</p>
+        </a>
+    </div>
+</main>
+</body>
+</html>

@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Testfälle</title></head>
+<head th:replace="~{fragments/layout :: head('Testfälle')}"></head>
 <body>
-<h1>Testfälle</h1>
+<nav th:replace="~{fragments/layout :: navbar('testcases')}"></nav>
 
-<form th:action="@{/testcases}" th:object="${testcase}" method="post">
-    <input th:field="*{title}" placeholder="Titel" required/>
-    <input th:field="*{description}" placeholder="Beschreibung"/>
-    <select name="requirementId">
-        <option value="">-- Anforderung wählen --</option>
-        <option th:each="r : ${requirements}"
-                th:value="${r.id}"
-                th:text="${r.title}"></option>
-    </select>
-    <button type="submit">Speichern</button>
-</form>
+<main class="container">
+    <h1>Testfälle</h1>
+    <p class="subtitle">US3 – Testfälle zu einer Anforderung erstellen.</p>
 
-<table border="1">
-    <tr><th>ID</th><th>Titel</th><th>Anforderung</th></tr>
-    <tr th:each="t : ${testcases}">
-        <td th:text="${t.id}"></td>
-        <td th:text="${t.title}"></td>
-        <td th:text="${t.requirement != null ? t.requirement.title : '-'}"></td>
-    </tr>
-</table>
+    <div class="card">
+        <h2>Neuer Testfall</h2>
+        <form class="inline" th:action="@{/testcases}" th:object="${testcase}" method="post">
+            <input type="text" th:field="*{title}" placeholder="Titel" required/>
+            <input type="text" th:field="*{description}" placeholder="Beschreibung"/>
+            <select name="requirementId" required>
+                <option value="" disabled selected>-- Anforderung wählen --</option>
+                <option th:each="r : ${requirements}"
+                        th:value="${r.id}"
+                        th:text="${r.title}"></option>
+            </select>
+            <button type="submit">Speichern</button>
+        </form>
+    </div>
+
+    <table>
+        <tr><th>ID</th><th>Titel</th><th>Anforderung</th></tr>
+        <tr th:each="t : ${testcases}">
+            <td th:text="${t.id}"></td>
+            <td th:text="${t.title}"></td>
+            <td th:text="${t.requirement != null ? t.requirement.title : '-'}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(testcases)}">
+            <td colspan="3" class="empty">Noch keine Testfälle erfasst.</td>
+        </tr>
+    </table>
+</main>
 </body>
 </html>

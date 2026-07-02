@@ -1,39 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Testdurchführungen</title></head>
+<head th:replace="~{fragments/layout :: head('Testdurchführungen')}"></head>
 <body>
-<h1>Testdurchführungen</h1>
+<nav th:replace="~{fragments/layout :: navbar('executions')}"></nav>
 
-<form th:action="@{/executions}" th:object="${execution}" method="post">
-    <select name="testRunId">
-        <option value="">-- Testlauf wählen --</option>
-        <option th:each="r : ${testruns}" th:value="${r.id}" th:text="${r.name}"></option>
-    </select>
-    <select name="testCaseId">
-        <option value="">-- Testfall wählen --</option>
-        <option th:each="t : ${testcases}" th:value="${t.id}" th:text="${t.title}"></option>
-    </select>
-    <input th:field="*{tester}" placeholder="Tester Name" required/>
-    <button type="submit">Zuordnen</button>
-</form>
+<main class="container">
+    <h1>Testdurchführungen</h1>
+    <p class="subtitle">US4 – Testlauf mit Testfällen und Tester:in verknüpfen · US5 – Ergebnis erfassen.</p>
 
-<table border="1">
-    <tr><th>ID</th><th>Testlauf</th><th>Testfall</th><th>Tester</th><th>Ergebnis</th><th>Aktion</th></tr>
-    <tr th:each="e : ${executions}">
-        <td th:text="${e.id}"></td>
-        <td th:text="${e.testRun.name}"></td>
-        <td th:text="${e.testCase.title}"></td>
-        <td th:text="${e.tester}"></td>
-        <td th:text="${e.result}"></td>
-        <td>
-            <form th:action="@{/executions/{id}/result(id=${e.id})}" method="post">
-                <select name="result">
-                    <option th:each="r : ${results}" th:value="${r}" th:text="${r}"></option>
-                </select>
-                <button type="submit">Setzen</button>
-            </form>
-        </td>
-    </tr>
-</table>
+    <div class="card">
+        <h2>Testfall zuordnen (US4)</h2>
+        <form class="inline" th:action="@{/executions}" th:object="${execution}" method="post">
+            <select name="testRunId" required>
+                <option value="" disabled selected>-- Testlauf wählen --</option>
+                <option th:each="r : ${testruns}" th:value="${r.id}" th:text="${r.name}"></option>
+            </select>
+            <select name="testCaseId" required>
+                <option value="" disabled selected>-- Testfall wählen --</option>
+                <option th:each="t : ${testcases}" th:value="${t.id}" th:text="${t.title}"></option>
+            </select>
+            <input type="text" th:field="*{tester}" placeholder="Tester:in" required/>
+            <button type="submit">Zuordnen</button>
+        </form>
+    </div>
+
+    <table>
+        <tr><th>ID</th><th>Testlauf</th><th>Testfall</th><th>Tester:in</th><th>Ergebnis</th><th>Ergebnis setzen (US5)</th></tr>
+        <tr th:each="e : ${executions}">
+            <td th:text="${e.id}"></td>
+            <td th:text="${e.testRun.name}"></td>
+            <td th:text="${e.testCase.title}"></td>
+            <td th:text="${e.tester}"></td>
+            <td><span class="badge" th:classappend="${e.result}" th:text="${e.result}"></span></td>
+            <td>
+                <form class="inline" th:action="@{/executions/{id}/result(id=${e.id})}" method="post">
+                    <select name="result">
+                        <option th:each="r : ${results}" th:value="${r}" th:text="${r}" th:selected="${r == e.result}"></option>
+                    </select>
+                    <button type="submit" class="small">Setzen</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(executions)}">
+            <td colspan="6" class="empty">Noch keine Zuordnungen vorhanden.</td>
+        </tr>
+    </table>
+</main>
 </body>
 </html>

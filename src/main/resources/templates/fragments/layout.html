@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} + ' – Require4Testing'">Require4Testing</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<nav th:fragment="navbar(active)" class="navbar">
+    <a th:href="@{/}" class="brand">Require4Testing</a>
+    <div class="nav-links">
+        <a th:href="@{/requirements}" th:classappend="${active == 'requirements'} ? ' active'">Anforderungen</a>
+        <a th:href="@{/testruns}" th:classappend="${active == 'testruns'} ? ' active'">Testläufe</a>
+        <a th:href="@{/testcases}" th:classappend="${active == 'testcases'} ? ' active'">Testfälle</a>
+        <a th:href="@{/executions}" th:classappend="${active == 'executions'} ? ' active'">Testdurchführungen</a>
+    </div>
+</nav>
+</body>
+</html>

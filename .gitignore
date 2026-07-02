@@ -1,10 +1,26 @@
-HELP.md
+### Build-Output (Maven) ###
 target/
-.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-### STS ###
+### Maven-Wrapper (nur die JAR, nicht die Properties) ###
+.mvn/wrapper/maven-wrapper.jar
+
+### Projekt-/Hilfsdateien, die nicht zur Abgabe gehoeren ###
+HELP.md
+CLAUDE.md
+
+### Pruefungsmaterialien / interne Notizen (NICHT auf oeffentliches GitHub) ###
+# IU-Aufgabenstellung: Urheberrecht der IU, Veroeffentlichung auf Drittplattformen untersagt
+Aufgabenstellung*.pdf
+# Interne Fallstudien-Vorgaben / Notizen
+01_Fallstudie.md
+01_Fallstudie_IPWA01-01_React_archiv.md
+
+### Eclipse / Spring Tools (STS) ###
 .apt_generated
 .classpath
 .factorypath
@@ -25,9 +41,14 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
+
+### Betriebssystem ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+logs/

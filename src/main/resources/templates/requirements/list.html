@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Anforderungen</title></head>
+<head th:replace="~{fragments/layout :: head('Anforderungen')}"></head>
 <body>
-<h1>Anforderungen</h1>
+<nav th:replace="~{fragments/layout :: navbar('requirements')}"></nav>
 
-<form th:action="@{/requirements}" th:object="${requirement}" method="post">
-    <input th:field="*{title}" placeholder="Titel" required/>
-    <input th:field="*{description}" placeholder="Beschreibung"/>
-    <button type="submit">Speichern</button>
-</form>
+<main class="container">
+    <h1>Anforderungen</h1>
+    <p class="subtitle">US1 – Zu testende Anforderungen erstellen.</p>
 
-<table border="1">
-    <tr><th>ID</th><th>Titel</th><th>Beschreibung</th></tr>
-    <tr th:each="r : ${requirements}">
-        <td th:text="${r.id}"></td>
-        <td th:text="${r.title}"></td>
-        <td th:text="${r.description}"></td>
-    </tr>
-</table>
+    <div class="card">
+        <h2>Neue Anforderung</h2>
+        <form class="inline" th:action="@{/requirements}" th:object="${requirement}" method="post">
+            <input type="text" th:field="*{title}" placeholder="Titel" required/>
+            <input type="text" th:field="*{description}" placeholder="Beschreibung"/>
+            <button type="submit">Speichern</button>
+        </form>
+    </div>
+
+    <table>
+        <tr><th>ID</th><th>Titel</th><th>Beschreibung</th></tr>
+        <tr th:each="r : ${requirements}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.title}"></td>
+            <td th:text="${r.description}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(requirements)}">
+            <td colspan="3" class="empty">Noch keine Anforderungen erfasst.</td>
+        </tr>
+    </table>
+</main>
 </body>
 </html>

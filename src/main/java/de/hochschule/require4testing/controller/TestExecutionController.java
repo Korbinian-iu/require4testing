@@ -44,8 +44,10 @@ public class TestExecutionController {
     public String updateResult(@PathVariable Long id,
                                @RequestParam TestExecution.Result result) {
         TestExecution e = executionService.findById(id);
-        e.setResult(result);
-        executionService.save(e);
+        if (e != null) {
+            e.setResult(result);
+            executionService.save(e);
+        }
         return "redirect:/executions";
     }
 }
