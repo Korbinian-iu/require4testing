@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Login')}"></head>
+<body>
+<main class="container">
+    <h1>Anmeldung</h1>
+
+    <div th:if="${param.error}" class="empty">Benutzername oder Passwort ist falsch.</div>
+    <div th:if="${param.logout}" class="empty">Du wurdest abgemeldet.</div>
+
+    <div class="card">
+        <form th:action="@{/login}" method="post" class="inline">
+            <input type="text" name="username" placeholder="Benutzername" required autofocus/>
+            <input type="password" name="password" placeholder="Passwort" required/>
+            <button type="submit">Anmelden</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

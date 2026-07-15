@@ -22,11 +22,15 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form.permitAll())
+            .formLogin(form -> form
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/", true)
+                    .permitAll()
+                )
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            );
+                    .logoutSuccessUrl("/login?logout")
+                    .permitAll()
+                );
         return http.build();
     }
 }

@@ -10,6 +10,9 @@
 <nav th:fragment="navbar(active)" class="navbar">
     <a th:href="@{/}" class="brand">Require4Testing</a>
     <div class="nav-links">
+    	<form th:action="@{/logout}" method="post" class="logout-form">
+      	  <button type="submit">Abmelden</button>
+   		</form>
         <a th:href="@{/requirements}" th:classappend="${active == 'requirements'} ? ' active'">Anforderungen</a>
         <a th:href="@{/testruns}" th:classappend="${active == 'testruns'} ? ' active'">Testläufe</a>
         <a th:href="@{/testcases}" th:classappend="${active == 'testcases'} ? ' active'">Testfälle</a>
