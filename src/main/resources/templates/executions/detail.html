@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ergebnis erfassen')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('executions')}"></nav>
+
+<main class="container">
+    <p><a th:href="@{/executions}">← Zurück zu Testdurchführungen</a></p>
+    <h1 th:text="${execution.testCase != null ? execution.testCase.title : 'Testdurchführung'}">Testdurchführung</h1>
+    <p class="subtitle">
+        Testlauf: <span th:text="${execution.testRun != null ? execution.testRun.name : '-'}"></span> ·
+        Tester:in: <span th:text="${execution.tester != null ? execution.tester.username : '-'}"></span> ·
+        Gesamtergebnis: <strong th:text="${aggregated}"></strong>
+    </p>
+
+    <div class="card">
+        <h2>Schritte &amp; Ergebnis (US5)</h2>
+        <table>
+            <tr><th>#</th><th>Aktion</th><th>Erwartet</th><th>Aktueller Status</th><th>Ergebnis erfassen</th></tr>
+            <tr th:each="s : ${steps}">
+                <td th:text="${s.stepNumber}"></td>
+                <td th:text="${s.action}"></td>
+                <td th:text="${s.expectedResult}"></td>
+                <td th:text="${latestByStep[s.id] != null ? latestByStep[s.id].status : 'NICHT_AUSGEFUEHRT'}"></td>
+                <td>
+                    <form class="inline" th:action="@{/executions/{id}/steps/{sid}/result(id=${execution.id},sid=${s.id})}" method="post">
+                        <select name="status">
+                            <option th:each="st : ${statuses}" th:value="${st}" th:text="${st}"></option>
+                        </select>
+                        <input type="text" name="comment" placeholder="Kommentar"/>
+                        <button type="submit" class="small">Speichern</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(steps)}">
+                <td colspan="5" class="empty">Dieser Testfall hat noch keine Schritte (in US8 anlegen).</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Verlauf (Historie)</h2>
+        <table>
+            <tr><th>Zeitpunkt</th><th>Schritt</th><th>Status</th><th>Kommentar</th><th>Erfasst von</th></tr>
+            <tr th:each="h : ${history}">
+                <td th:text="${#temporals.format(h.recordedAt, 'dd.MM.yyyy HH:mm')}"></td>
+                <td th:text="${h.step != null ? h.step.stepNumber : '-'}"></td>
+                <td th:text="${h.status}"></td>
+                <td th:text="${h.comment}"></td>
+                <td th:text="${h.testedBy != null ? h.testedBy.username : '-'}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(history)}">
+                <td colspan="5" class="empty">Noch keine Ergebnisse erfasst.</td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

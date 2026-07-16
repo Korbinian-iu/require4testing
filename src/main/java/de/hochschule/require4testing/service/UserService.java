@@ -16,4 +16,7 @@ public class UserService {
     public List<User> findAllTesters() { return userRepository.findByRoles_Name(RoleName.TESTER); }
     public User findById(Long id) { return userRepository.findById(id).orElse(null); }
     public List<User> findAll() { return userRepository.findAll(); }
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
 }

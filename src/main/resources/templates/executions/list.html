@@ -6,7 +6,7 @@
 
 <main class="container">
     <h1>Testdurchführungen</h1>
-    <p class="subtitle">US4 – Testlauf mit Testfällen und Tester:in verknüpfen · US5 – Ergebnis erfassen.</p>
+    <p class="subtitle">US4 – Zuordnen · US5 – Ergebnis pro Schritt erfassen.</p>
 
     <div class="card">
         <h2>Testfall zuordnen (US4)</h2>
@@ -28,21 +28,14 @@
     </div>
 
     <table>
-        <tr><th>ID</th><th>Testlauf</th><th>Testfall</th><th>Tester:in</th><th>Ergebnis</th><th>Ergebnis setzen (US5)</th></tr>
+        <tr><th>ID</th><th>Testlauf</th><th>Testfall</th><th>Tester:in</th><th>Gesamtergebnis</th><th></th></tr>
         <tr th:each="e : ${executions}">
             <td th:text="${e.id}"></td>
             <td th:text="${e.testRun != null ? e.testRun.name : '-'}"></td>
             <td th:text="${e.testCase != null ? e.testCase.title : '-'}"></td>
             <td th:text="${e.tester != null ? e.tester.username : '-'}"></td>
-            <td><span class="badge" th:classappend="${e.result}" th:text="${e.result}"></span></td>
-            <td>
-                <form class="inline" th:action="@{/executions/{id}/result(id=${e.id})}" method="post">
-                    <select name="result">
-                        <option th:each="r : ${results}" th:value="${r}" th:text="${r}" th:selected="${r == e.result}"></option>
-                    </select>
-                    <button type="submit" class="small">Setzen</button>
-                </form>
-            </td>
+            <td th:text="${statusByExecution[e.id]}"></td>
+            <td><a th:href="@{/executions/{id}(id=${e.id})}">Ergebnisse erfassen</a></td>
         </tr>
         <tr th:if="${#lists.isEmpty(executions)}">
             <td colspan="6" class="empty">Noch keine Zuordnungen vorhanden.</td>
