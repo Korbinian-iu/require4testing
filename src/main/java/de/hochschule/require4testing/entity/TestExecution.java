@@ -20,7 +20,9 @@ public class TestExecution {
     @JoinColumn(name = "testcase_id")
     private TestCase testCase;
 
-    private String tester;
+    @ManyToOne
+    @JoinColumn(name = "tester_id")
+    private User tester;
 
     @Enumerated(EnumType.STRING)
     private Result result = Result.PENDING;
@@ -31,8 +33,8 @@ public class TestExecution {
     public void setTestRun(TestRun testRun) { this.testRun = testRun; }
     public TestCase getTestCase() { return testCase; }
     public void setTestCase(TestCase testCase) { this.testCase = testCase; }
-    public String getTester() { return tester; }
-    public void setTester(String tester) { this.tester = tester; }
+    public User getTester() { return tester; }
+    public void setTester(User tester) { this.tester = tester; }
     public Result getResult() { return result; }
     public void setResult(Result result) { this.result = result; }
 }

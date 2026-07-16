@@ -20,22 +20,27 @@ public class TestExecutionController {
     @Autowired
     private TestCaseService testCaseService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
     public String list(Model model) {
         model.addAttribute("executions", executionService.findAll());
         model.addAttribute("testruns", testRunService.findAll());
         model.addAttribute("testcases", testCaseService.findAll());
-        model.addAttribute("execution", new TestExecution());
+        model.addAttribute("testers", userService.findAllTesters());
         model.addAttribute("results", TestExecution.Result.values());
         return "executions/list";
     }
 
     @PostMapping
-    public String save(@ModelAttribute TestExecution execution,
-                       @RequestParam Long testRunId,
-                       @RequestParam Long testCaseId) {
+    public String save(@RequestParam Long testRunId,
+                       @RequestParam Long testCaseId,
+                       @RequestParam Long testerId) {
+        TestExecution execution = new TestExecution();
         execution.setTestRun(testRunService.findById(testRunId));
         execution.setTestCase(testCaseService.findById(testCaseId));
+        execution.setTester(userService.findById(testerId));
         executionService.save(execution);
         return "redirect:/executions";
     }

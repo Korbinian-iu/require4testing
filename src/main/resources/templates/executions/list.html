@@ -10,7 +10,7 @@
 
     <div class="card">
         <h2>Testfall zuordnen (US4)</h2>
-        <form class="inline" th:action="@{/executions}" th:object="${execution}" method="post">
+        <form class="inline" th:action="@{/executions}" method="post">
             <select name="testRunId" required>
                 <option value="" disabled selected>-- Testlauf wählen --</option>
                 <option th:each="r : ${testruns}" th:value="${r.id}" th:text="${r.name}"></option>
@@ -19,7 +19,10 @@
                 <option value="" disabled selected>-- Testfall wählen --</option>
                 <option th:each="t : ${testcases}" th:value="${t.id}" th:text="${t.title}"></option>
             </select>
-            <input type="text" th:field="*{tester}" placeholder="Tester:in" required/>
+            <select name="testerId" required>
+                <option value="" disabled selected>-- Tester:in wählen --</option>
+                <option th:each="u : ${testers}" th:value="${u.id}" th:text="${u.username}"></option>
+            </select>
             <button type="submit">Zuordnen</button>
         </form>
     </div>
@@ -28,9 +31,9 @@
         <tr><th>ID</th><th>Testlauf</th><th>Testfall</th><th>Tester:in</th><th>Ergebnis</th><th>Ergebnis setzen (US5)</th></tr>
         <tr th:each="e : ${executions}">
             <td th:text="${e.id}"></td>
-            <td th:text="${e.testRun.name}"></td>
-            <td th:text="${e.testCase.title}"></td>
-            <td th:text="${e.tester}"></td>
+            <td th:text="${e.testRun != null ? e.testRun.name : '-'}"></td>
+            <td th:text="${e.testCase != null ? e.testCase.title : '-'}"></td>
+            <td th:text="${e.tester != null ? e.tester.username : '-'}"></td>
             <td><span class="badge" th:classappend="${e.result}" th:text="${e.result}"></span></td>
             <td>
                 <form class="inline" th:action="@{/executions/{id}/result(id=${e.id})}" method="post">
