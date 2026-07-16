@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface TestCaseRepository extends JpaRepository<TestCase, Long> {
-    List<TestCase> findByRequirementId(Long requirementId);
+    List<TestCase> findByRequirements_Id(Long requirementId);
 }

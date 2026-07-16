@@ -6,32 +6,56 @@
 
 <main class="container">
     <h1>Testfälle</h1>
-    <p class="subtitle">US3 – Testfälle zu einer Anforderung erstellen.</p>
+    <p class="subtitle">US3 – Testfälle zu Anforderungen erstellen (mehrere möglich).</p>
 
     <div class="card">
         <h2>Neuer Testfall</h2>
-        <form class="inline" th:action="@{/testcases}" th:object="${testcase}" method="post">
-            <input type="text" th:field="*{title}" placeholder="Titel" required/>
-            <input type="text" th:field="*{description}" placeholder="Beschreibung"/>
-            <select name="requirementId" required>
-                <option value="" disabled selected>-- Anforderung wählen --</option>
-                <option th:each="r : ${requirements}"
-                        th:value="${r.id}"
-                        th:text="${r.title}"></option>
-            </select>
+        <form th:action="@{/testcases}" th:object="${testcase}" method="post">
+            <div>
+                <input type="text" th:field="*{title}" placeholder="Titel"/>
+                <span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+            </div>
+            <div>
+                <input type="text" th:field="*{precondition}" placeholder="Vorbedingung"/>
+            </div>
+            <div>
+                <select th:field="*{priority}">
+                    <option th:value="''" disabled>Priorität wählen…</option>
+                    <option th:each="p : ${priorities}" th:value="${p}" th:text="${p}"></option>
+                </select>
+                <select th:field="*{type}">
+                    <option th:value="''" disabled>Typ wählen…</option>
+                    <option th:each="ty : ${types}" th:value="${ty}" th:text="${ty}"></option>
+                </select>
+            </div>
+            <div>
+                <label>Anforderungen (Mehrfachauswahl mit Strg/Cmd):</label><br/>
+                <select name="requirementIds" multiple size="4">
+                    <option th:each="r : ${requirements}" th:value="${r.id}"
+                            th:text="${(r.reqKey != null ? r.reqKey : ('#' + r.id)) + ' – ' + r.title}"></option>
+                </select>
+            </div>
             <button type="submit">Speichern</button>
         </form>
     </div>
 
     <table>
-        <tr><th>ID</th><th>Titel</th><th>Anforderung</th></tr>
+        <tr><th>ID</th><th>Titel</th><th>Priorität</th><th>Typ</th><th>Anforderungen</th><th>Schritte</th><th></th></tr>
         <tr th:each="t : ${testcases}">
             <td th:text="${t.id}"></td>
             <td th:text="${t.title}"></td>
-            <td th:text="${t.requirement != null ? t.requirement.title : '-'}"></td>
+            <td th:text="${t.priority}"></td>
+            <td th:text="${t.type}"></td>
+            <td>
+                <span th:each="r,it : ${t.requirements}">
+                    <span th:text="${r.reqKey != null ? r.reqKey : ('#' + r.id)}"></span><span th:if="${!it.last}">, </span>
+                </span>
+            </td>
+            <td th:text="${#lists.size(t.steps)}"></td>
+            <td><a th:href="@{/testcases/{id}(id=${t.id})}">Details</a></td>
         </tr>
         <tr th:if="${#lists.isEmpty(testcases)}">
-            <td colspan="3" class="empty">Noch keine Testfälle erfasst.</td>
+            <td colspan="7" class="empty">Noch keine Testfälle erfasst.</td>
         </tr>
     </table>
 </main>

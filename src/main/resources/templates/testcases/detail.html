@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Testfall')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('testcases')}"></nav>
+
+<main class="container">
+    <p><a th:href="@{/testcases}">← Zurück zu Testfällen</a></p>
+    <h1 th:text="${testcase.title}">Testfall</h1>
+    <p class="subtitle">
+        Priorität: <span th:text="${testcase.priority}"></span> ·
+        Typ: <span th:text="${testcase.type}"></span>
+    </p>
+
+    <div class="card">
+        <h2>Vorbedingung</h2>
+        <p th:text="${testcase.precondition != null ? testcase.precondition : '–'}"></p>
+
+        <h2>Abgedeckte Anforderungen</h2>
+        <ul>
+            <li th:each="r : ${testcase.requirements}"
+                th:text="${(r.reqKey != null ? r.reqKey : ('#' + r.id)) + ' – ' + r.title}"></li>
+            <li th:if="${#lists.isEmpty(testcase.requirements)}">Keine verknüpft.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Testschritte (US8)</h2>
+        <table>
+            <tr><th>#</th><th>Aktion</th><th>Erwartetes Ergebnis</th></tr>
+            <tr th:each="s : ${testcase.steps}">
+                <td th:text="${s.stepNumber}"></td>
+                <td th:text="${s.action}"></td>
+                <td th:text="${s.expectedResult}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(testcase.steps)}">
+                <td colspan="3" class="empty">Noch keine Schritte.</td>
+            </tr>
+        </table>
+
+        <h3>Schritt hinzufügen</h3>
+        <form th:action="@{/testcases/{id}/steps(id=${testcase.id})}" method="post">
+            <input type="text" name="action" placeholder="Aktion" required/>
+            <input type="text" name="expectedResult" placeholder="Erwartetes Ergebnis"/>
+            <button type="submit">Schritt hinzufügen</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
