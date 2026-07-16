@@ -10,21 +10,51 @@
 
     <div class="card">
         <h2>Neuer Testlauf</h2>
-        <form class="inline" th:action="@{/testruns}" th:object="${testrun}" method="post">
-            <input type="text" th:field="*{name}" placeholder="Name des Testlaufs" required/>
+        <form th:action="@{/testruns}" th:object="${testrun}" method="post">
+            <div>
+                <input type="text" th:field="*{name}" placeholder="Name des Testlaufs"/>
+                <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            </div>
+            <div>
+                <input type="text" th:field="*{description}" placeholder="Beschreibung"/>
+            </div>
+            <div>
+                <label>Start <input type="date" th:field="*{plannedStart}"/></label>
+                <label>Ende <input type="date" th:field="*{plannedEnd}"/></label>
+            </div>
+            <div>
+                <select th:field="*{status}">
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                </select>
+            </div>
+            <div>
+                <input type="text" th:field="*{targetEnvironment}" placeholder="Zielumgebung / Release"/>
+            </div>
             <button type="submit">Speichern</button>
         </form>
     </div>
 
     <table>
-        <tr><th>ID</th><th>Name</th><th>Erstellt am</th></tr>
+        <tr><th>ID</th><th>Name</th><th>Status</th><th>Start</th><th>Ende</th><th>Umgebung</th><th>Erstellt</th><th>Status ändern</th></tr>
         <tr th:each="t : ${testruns}">
             <td th:text="${t.id}"></td>
             <td th:text="${t.name}"></td>
+            <td th:text="${t.status}"></td>
+            <td th:text="${t.plannedStart != null ? #temporals.format(t.plannedStart, 'dd.MM.yyyy') : ''}"></td>
+            <td th:text="${t.plannedEnd != null ? #temporals.format(t.plannedEnd, 'dd.MM.yyyy') : ''}"></td>
+            <td th:text="${t.targetEnvironment}"></td>
             <td th:text="${#temporals.format(t.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+            <td>
+                <form th:action="@{/testruns/{id}/status(id=${t.id})}" method="post" class="inline">
+                    <select name="status">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == t.status}"></option>
+                    </select>
+                    <button type="submit">OK</button>
+                </form>
+            </td>
         </tr>
         <tr th:if="${#lists.isEmpty(testruns)}">
-            <td colspan="3" class="empty">Noch keine Testläufe angelegt.</td>
+            <td colspan="8" class="empty">Noch keine Testläufe angelegt.</td>
         </tr>
     </table>
 </main>

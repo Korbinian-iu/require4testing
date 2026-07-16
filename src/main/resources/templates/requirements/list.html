@@ -10,22 +10,47 @@
 
     <div class="card">
         <h2>Neue Anforderung</h2>
-        <form class="inline" th:action="@{/requirements}" th:object="${requirement}" method="post">
-            <input type="text" th:field="*{title}" placeholder="Titel" required/>
-            <input type="text" th:field="*{description}" placeholder="Beschreibung"/>
+        <form th:action="@{/requirements}" th:object="${requirement}" method="post">
+            <div>
+                <input type="text" th:field="*{title}" placeholder="Titel"/>
+                <span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+            </div>
+            <div>
+                <input type="text" th:field="*{description}" placeholder="Beschreibung"/>
+            </div>
+            <div>
+                <select th:field="*{priority}">
+                    <option th:value="''" disabled>Priorität wählen…</option>
+                    <option th:each="p : ${priorities}" th:value="${p}" th:text="${p}"></option>
+                </select>
+                <span class="error" th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}"></span>
+            </div>
+            <div>
+                <select th:field="*{status}">
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                </select>
+            </div>
+            <div>
+                <input type="text" th:field="*{category}" placeholder="Kategorie"/>
+            </div>
+            <div>
+                <textarea th:field="*{acceptanceCriteria}" placeholder="Akzeptanzkriterien" rows="3"></textarea>
+            </div>
             <button type="submit">Speichern</button>
         </form>
     </div>
 
     <table>
-        <tr><th>ID</th><th>Titel</th><th>Beschreibung</th></tr>
+        <tr><th>Schlüssel</th><th>Titel</th><th>Priorität</th><th>Status</th><th>Kategorie</th></tr>
         <tr th:each="r : ${requirements}">
-            <td th:text="${r.id}"></td>
+            <td th:text="${r.reqKey}"></td>
             <td th:text="${r.title}"></td>
-            <td th:text="${r.description}"></td>
+            <td th:text="${r.priority}"></td>
+            <td th:text="${r.status}"></td>
+            <td th:text="${r.category}"></td>
         </tr>
         <tr th:if="${#lists.isEmpty(requirements)}">
-            <td colspan="3" class="empty">Noch keine Anforderungen erfasst.</td>
+            <td colspan="5" class="empty">Noch keine Anforderungen erfasst.</td>
         </tr>
     </table>
 </main>

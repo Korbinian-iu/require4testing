@@ -14,6 +14,13 @@ public class RequirementService {
 
     public List<Requirement> findAll() { return repository.findAll(); }
     public Requirement findById(Long id) { return repository.findById(id).orElse(null); }
-    public Requirement save(Requirement r) { return repository.save(r); }
+    public Requirement save(Requirement r) {
+        Requirement saved = repository.save(r);
+        if (saved.getReqKey() == null) {
+            saved.setReqKey(String.format("REQ-%03d", saved.getId()));
+            saved = repository.save(saved);
+        }
+        return saved;
+    }
     public void deleteById(Long id) { repository.deleteById(id); }
 }
