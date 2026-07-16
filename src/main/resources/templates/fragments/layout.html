@@ -16,7 +16,9 @@
         <a th:href="@{/requirements}" th:classappend="${active == 'requirements'} ? ' active'">Anforderungen</a>
         <a th:href="@{/testruns}" th:classappend="${active == 'testruns'} ? ' active'">Testläufe</a>
         <a th:href="@{/testcases}" th:classappend="${active == 'testcases'} ? ' active'">Testfälle</a>
+        <a th:href="@{/executions/mine}" th:classappend="${active == 'mine'} ? ' active'">Meine Testfälle</a>
         <a th:href="@{/executions}" th:classappend="${active == 'executions'} ? ' active'">Testdurchführungen</a>
+        <a th:href="@{/dashboard}" th:classappend="${active == 'dashboard'} ? ' active'">Dashboard</a>
     </div>
 </nav>
 </body>

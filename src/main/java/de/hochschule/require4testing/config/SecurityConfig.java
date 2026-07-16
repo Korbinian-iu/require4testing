@@ -18,8 +18,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(auth -> auth
+        .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/dashboard").hasRole("TEST_MANAGER")
+                .requestMatchers("/executions/mine").hasRole("TESTER")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

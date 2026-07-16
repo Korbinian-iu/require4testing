@@ -17,4 +17,7 @@ public class TestExecutionService {
     public TestExecution save(TestExecution t) { return repository.save(t); }
     public void deleteById(Long id) { repository.deleteById(id); }
     public List<TestExecution> findByTestRunId(Long testRunId) { return repository.findByTestRunId(testRunId); }
+    public java.util.List<TestExecution> findByTesterId(Long testerId) {
+        return repository.findByTester_Id(testerId);
+    }
 }

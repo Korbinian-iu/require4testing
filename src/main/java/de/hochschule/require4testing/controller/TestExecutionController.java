@@ -77,4 +77,25 @@ public class TestExecutionController {
         }
         return "redirect:/executions/" + id;
     }
+    @GetMapping("/mine")
+    public String myTestCases(Model model, java.security.Principal principal) {
+        User current = (principal != null) ? userService.findByUsername(principal.getName()) : null;
+        List<TestExecution> mine = (current != null)
+                ? executionService.findByTesterId(current.getId()) : new ArrayList<>();
+
+        List<TestExecution> open = new ArrayList<>();
+        List<TestExecution> done = new ArrayList<>();
+        Map<Long, TestResultStatus> statusByExecution = new HashMap<>();
+        for (TestExecution e : mine) {
+            TestResultStatus s = stepResultService.aggregatedStatus(e);
+            statusByExecution.put(e.getId(), s);
+            if (s == TestResultStatus.NICHT_AUSGEFUEHRT || s == TestResultStatus.ERNEUT_ZU_TESTEN) open.add(e);
+            else done.add(e);
+        }
+        model.addAttribute("open", open);
+        model.addAttribute("done", done);
+        model.addAttribute("statusByExecution", statusByExecution);
+        model.addAttribute("username", current != null ? current.getUsername() : "");
+        return "executions/mine";
+    }
 }

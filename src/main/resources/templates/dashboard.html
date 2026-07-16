@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('dashboard')}"></nav>
+
+<main class="container">
+    <h1>Status-Dashboard</h1>
+    <p class="subtitle">US7 – Überblick über den Status aller Testdurchführungen je Testlauf.</p>
+
+    <div th:if="${#lists.isEmpty(summaries)}" class="card">
+        <p class="empty">Noch keine Testläufe vorhanden.</p>
+    </div>
+
+    <div class="card" th:each="s : ${summaries}">
+        <h2 th:text="${s.runName}">Testlauf</h2>
+        <p class="subtitle">Status: <span th:text="${s.runStatus}"></span> · <span th:text="${s.total}"></span> Zuordnung(en)</p>
+
+        <p>Fortschritt: <strong th:text="${s.executed} + ' / ' + ${s.total} + ' ausgeführt (' + ${s.progressPercent} + '%)'"></strong></p>
+        <div style="background:#e5e7eb;border-radius:6px;height:16px;width:100%;overflow:hidden;margin-bottom:10px;">
+            <div th:style="'width:' + ${s.progressPercent} + '%;background:#2563eb;height:16px;'"></div>
+        </div>
+
+        <p>Pass-Rate: <strong th:text="${s.passRatePercent} + '%'"></strong></p>
+        <div style="background:#e5e7eb;border-radius:6px;height:16px;width:100%;overflow:hidden;margin-bottom:10px;">
+            <div th:style="'width:' + ${s.passRatePercent} + '%;background:#16a34a;height:16px;'"></div>
+        </div>
+
+        <table>
+            <tr><th>Bestanden</th><th>Fehlgeschlagen</th><th>Blockiert</th><th>Übersprungen</th><th>Erneut</th><th>Nicht ausgeführt</th></tr>
+            <tr>
+                <td th:text="${s.passed}"></td>
+                <td th:text="${s.failed}"></td>
+                <td th:text="${s.blocked}"></td>
+                <td th:text="${s.skipped}"></td>
+                <td th:text="${s.retest}"></td>
+                <td th:text="${s.notExecuted}"></td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

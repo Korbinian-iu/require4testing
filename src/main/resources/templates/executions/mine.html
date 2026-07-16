@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Meine Testfälle')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('mine')}"></nav>
+
+<main class="container">
+    <h1>Meine Testfälle</h1>
+    <p class="subtitle">US6 – Dir zugewiesene Testfälle (<span th:text="${username}"></span>).</p>
+
+    <div class="card">
+        <h2>Offen</h2>
+        <table>
+            <tr><th>Testlauf</th><th>Testfall</th><th>Status</th><th></th></tr>
+            <tr th:each="e : ${open}">
+                <td th:text="${e.testRun != null ? e.testRun.name : '-'}"></td>
+                <td th:text="${e.testCase != null ? e.testCase.title : '-'}"></td>
+                <td th:text="${statusByExecution[e.id]}"></td>
+                <td><a th:href="@{/executions/{id}(id=${e.id})}">Ergebnisse erfassen</a></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(open)}"><td colspan="4" class="empty">Nichts Offenes.</td></tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Erledigt</h2>
+        <table>
+            <tr><th>Testlauf</th><th>Testfall</th><th>Status</th><th></th></tr>
+            <tr th:each="e : ${done}">
+                <td th:text="${e.testRun != null ? e.testRun.name : '-'}"></td>
+                <td th:text="${e.testCase != null ? e.testCase.title : '-'}"></td>
+                <td th:text="${statusByExecution[e.id]}"></td>
+                <td><a th:href="@{/executions/{id}(id=${e.id})}">Details</a></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(done)}"><td colspan="4" class="empty">Noch nichts erledigt.</td></tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>
