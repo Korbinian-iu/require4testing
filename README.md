@@ -32,32 +32,39 @@ description         description            createdAt         testcase_id (FK)
                                                              result (ENUM)
 ```
 
-## Lokale Einrichtung
+## Lokale Einrichtung und Anmeldung
 
 ### Voraussetzungen
 - Java 17+
-- Maven
-- MySQL 8
+- XAMPP mit laufendem MySQL
+- Maven (der mitgelieferte Wrapper `mvnw` genügt)
 
 ### Datenbank einrichten
+Eine leere Datenbank anlegen – die Tabellen erzeugt Hibernate beim Start automatisch (`spring.jpa.hibernate.ddl-auto=update`):
 ```sql
 CREATE DATABASE require4testing;
 ```
 
-### Konfiguration
-Datei `src/main/resources/application.properties` anpassen:
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/require4testing
-spring.datasource.username=root
-spring.datasource.password=DEIN_PASSWORT
+### Datenbank-Passwort
+Das Passwort wird über die Umgebungsvariable `DB_PASSWORD` gelesen. Beim XAMPP-Standard (Benutzer `root` ohne Passwort) kann sie leer bleiben oder entfallen. Bei gesetztem MySQL-Passwort z. B. unter Windows (PowerShell):
+```powershell
+$env:DB_PASSWORD="deinPasswort"
 ```
 
 ### Starten
 ```bash
 ./mvnw spring-boot:run
 ```
+Anschließend im Browser öffnen: `http://localhost:8080`
 
-App erreichbar unter: `http://localhost:8080`
+### Anmeldung
+Der Zugriff ist geschützt; ohne Anmeldung wird auf die Login-Seite geleitet. Beim ersten Start wird automatisch ein Benutzer mit allen vier Rollen angelegt:
+
+| Benutzername | Passwort |
+|--------------|----------|
+| `admin`      | `admin123` |
+
+Dieser Benutzer kann den gesamten Funktionsumfang testen, einschließlich der rollengeschützten Bereiche **Dashboard** (`TEST_MANAGER`) und **Meine Testfälle** (`TESTER`).
 
 ## URLs
 
